@@ -13,7 +13,7 @@
 #include "foundation/constants.h"
 
 #define MAX_RAM_FRACTION 1.0
-#define DEFAULT_RAM_FRACTION 0.5
+#define DEFAULT_RAM_FRACTION 0.25
 #include <mimalloc.h>
 #include <stdatomic.h>
 #include <stdio.h>
@@ -122,7 +122,8 @@ void cbm_mem_init(double ram_fraction) {
     mi_option_set(mi_option_arena_eager_commit, 0);
     mi_option_set(mi_option_purge_decommits, SKIP_ONE);
     mi_option_set(mi_option_purge_delay, 0); /* immediate purge, no 1s delay */
-
+    mi_option_set(mi_option_abandoned_thread_purge, 1);
+    
     /* CBM_MEM_BUDGET_MB env override (memory analogue of CBM_WORKERS).
      * Lets users cap the budget directly without an enclosing cgroup —
      * useful on bare-metal hosts where cgroup memory limits are absent
